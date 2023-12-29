@@ -45,13 +45,10 @@ def main():
                     if date and hour:
                         first_available = f"{date} {hour}"
                         status = "Appointment Available"
-                        color = "green"
                     else:
                         status = "No Appointment"
-                        color = "red"
                 else:
                     status = "No Appointment"
-                    color = "red"
 
                 # Append the result to the results list.
                 results.append({"Time": time_now, "ID": appointment_id, "Status": status, "First Available": first_available})
@@ -64,9 +61,9 @@ def main():
                 color = 'red' if val == "No Appointment" else 'green'
                 return f'background-color: {color}'
 
-            # Clear previous data and display the new DataFrame.
+            # Clear previous data and display the new DataFrame with updated styling method.
             data_placeholder.empty()
-            data_placeholder.dataframe(df.style.applymap(color_status, subset=['Status']))
+            data_placeholder.dataframe(df.style.map(color_status, subset=['Status']))
 
             # Countdown to the next refresh.
             for remaining in range(5, 0, -1):
