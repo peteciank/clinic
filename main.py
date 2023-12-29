@@ -18,6 +18,7 @@ def main():
 
     # Input for IDs.
     ids = st.text_input("Enter the IDs separated by semicolons (e.g., 4753;4754;4755)")
+    data_container = st.empty()
 
     if st.button('Start Fetching Data'):
         id_list = ids.split(';')  # Split the input string into a list of IDs.
@@ -26,16 +27,16 @@ def main():
             results = []  # Initialize a list to store the results temporarily.
 
             for appointment_id in id_list:
-                data = fetch_data(appointment_id)  # Fetch the data for the given ID.
+                response_data = fetch_data(appointment_id)  # Fetch the data for the given ID.
                 time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Current time.
 
-                # Determine the status.
-                if data:
-                    status = "Appointment Available"
-                    color = "green"
-                else:
+                # Check the 'appointment' field in the response and determine the status.
+                if response_data and response_data.get('appointment') == []:
                     status = "No Appointment"
                     color = "red"
+                else:
+                    status = "Appointment Available"
+                    color = "green"
 
                 # Append the result to the results list.
                 results.append({"Time": time_now, "ID": appointment_id, "Status": status})
