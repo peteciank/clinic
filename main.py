@@ -15,11 +15,14 @@ def main():
     # Streamlit app title.
     st.title('API Data Fetcher')
 
+    # Container to hold the data.
+    data_container = st.empty()
+
     # Button to start the data fetching process.
     if st.button('Start Fetching Data'):
         while True:
             data = fetch_data()  # Fetch the data from the API.
-            st.json(data)  # Display the data as JSON in the app.
+            data_container.json(data)  # Display the data as JSON in the app.
             time.sleep(5)  # Wait for 5 seconds before fetching again.
 
 if __name__ == "__main__":
