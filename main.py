@@ -1,28 +1,53 @@
 import streamlit as st
 import requests
+import pandas as pd
 import time
+from datetime import datetime
 
-# Function to fetch data from the API.
-def fetch_data():
-    url = "https://api.hospitaldeclinicas.uba.ar/api/appointments/appointment/first/4753"
+# Function to fetch data from the API for a given ID.
+def fetch_data(appointment_id):
+    url = f"https://api.hospitaldeclinicas.uba.ar/api/appointments/appointment/first/{appointment_id}"
     response = requests.get(url)
     if response.status_code == 200:
         return response.json()  # Returns the JSON response if successful.
     else:
-        return "Error fetching data"  # Returns an error message if not successful.
+        return None  # Returns None if not successful.
 
 def main():
-    # Streamlit app title.
-    st.title('API Data Fetcher')
+    st.title('Multiple API Data Fetcher')
 
-    # Container to hold the data.
-    data_container = st.empty()
+    # Input for IDs.
+    ids = st.text_input("Enter the IDs separated by semicolons (e.g., 4753;4754;4755)")
 
-    # Button to start the data fetching process.
+    # DataFrame to hold the results.
+    df = pd.DataFrame(columns=["Time", "ID", "Status"])
+
     if st.button('Start Fetching Data'):
+        id_list = ids.split(';')  # Split the input string into a list of IDs.
+
         while True:
-            data = fetch_data()  # Fetch the data from the API.
-            data_container.json(data)  # Display the data as JSON in the app.
+            for appointment_id in id_list:
+                data = fetch_data(appointment_id)  # Fetch the data for the given ID.
+                time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Current time.
+
+                # Determine the status and add the result to the DataFrame.
+                if data:
+                    status = "Appointment Available"
+                    color = "green"
+                else:
+                    status = "No Appointment"
+                    color = "red"
+
+                # Append the result to the DataFrame.
+                df = df.append({"Time": time_now, "ID": appointment_id, "Status": status}, ignore_index=True)
+
+                # Display the DataFrame with color-coded statuses.
+                def color_status(val):
+                    color = 'red' if val == "No Appointment" else 'green'
+                    return f'background-color: {color}'
+
+                st.dataframe(df.style.applymap(color_status, subset=['Status']))
+
             time.sleep(5)  # Wait for 5 seconds before fetching again.
 
 if __name__ == "__main__":
