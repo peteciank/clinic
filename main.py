@@ -38,7 +38,7 @@ def main():
                 first_available = ""
 
                 # Check the response data and determine the status and first available appointment.
-                if response_data and 'appointment' in response_data and response_data['appointment']:
+                if response_data and response_data.get('appointment') and response_data['appointment']:
                     # Safely assuming the first one is the earliest if the list is not empty.
                     appointment = response_data['appointment'][0]
                     date = appointment.get('date')
