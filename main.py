@@ -17,7 +17,7 @@ def main():
     st.title('Multiple API Data Fetcher')
 
     # Input for IDs.
-    ids = st.text_input("Enter the IDs separated by semicolons (e.g., 4753;4754;4764;4766;4844)")
+    ids = st.text_input("Enter the IDs separated by semicolons (e.g., 4753;4754;4755)")
 
     if st.button('Start Fetching Data'):
         id_list = ids.split(';')  # Split the input string into a list of IDs.
@@ -33,22 +33,20 @@ def main():
                 response_data = fetch_data(appointment_id)  # Fetch the data for the given ID.
                 time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Current time.
 
-                # Initialize variables for date, hour, and status.
+                # Initialize variables for status and first available appointment.
+                status = "No Appointment"
                 first_available = ""
-                status = ""
 
                 # Check the response data and determine the status and first available appointment.
-                if response_data and response_data.get('appointment') != []:
-                    appointment = response_data.get('appointment')[0]  # Assuming the first one is the earliest.
+                if response_data and 'appointment' in response_data and response_data['appointment']:
+                    # Safely assuming the first one is the earliest if the list is not empty.
+                    appointment = response_data['appointment'][0]
                     date = appointment.get('date')
                     hour = appointment.get('hour')
                     if date and hour:
                         first_available = f"{date} {hour}"
                         status = "Appointment Available"
-                    else:
-                        status = "No Appointment"
-                else:
-                    status = "No Appointment"
+                # Note: If the 'appointment' is empty or not in the response, the status remains "No Appointment".
 
                 # Append the result to the results list.
                 results.append({"Time": time_now, "ID": appointment_id, "Status": status, "First Available": first_available})
