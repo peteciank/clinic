@@ -18,10 +18,13 @@ def main():
 
     # Input for IDs.
     ids = st.text_input("Enter the IDs separated by semicolons (e.g., 4753;4754;4755)")
-    data_container = st.empty()
 
     if st.button('Start Fetching Data'):
         id_list = ids.split(';')  # Split the input string into a list of IDs.
+
+        # Create a placeholder for the DataFrame and countdown.
+        data_placeholder = st.empty()
+        countdown_placeholder = st.empty()
 
         while True:
             results = []  # Initialize a list to store the results temporarily.
@@ -44,14 +47,22 @@ def main():
             # Create a DataFrame from the results list.
             df = pd.DataFrame(results)
 
-            # Display the DataFrame with color-coded statuses.
+            # Function to color the status.
             def color_status(val):
                 color = 'red' if val == "No Appointment" else 'green'
                 return f'background-color: {color}'
 
-            st.dataframe(df.style.applymap(color_status, subset=['Status']))
+            # Clear previous data and display the new DataFrame.
+            data_placeholder.empty()
+            data_placeholder.dataframe(df.style.applymap(color_status, subset=['Status']))
 
-            time.sleep(5)  # Wait for 5 seconds before fetching again.
+            # Countdown to the next refresh.
+            for remaining in range(5, 0, -1):
+                countdown_placeholder.text(f"Next refresh in: {remaining} seconds")
+                time.sleep(1)
+
+            # Clear countdown at the end of the cycle.
+            countdown_placeholder.empty()
 
 if __name__ == "__main__":
     main()
