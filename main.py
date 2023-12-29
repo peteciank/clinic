@@ -19,18 +19,17 @@ def main():
     # Input for IDs.
     ids = st.text_input("Enter the IDs separated by semicolons (e.g., 4753;4754;4755)")
 
-    # DataFrame to hold the results.
-    df = pd.DataFrame(columns=["Time", "ID", "Status"])
-
     if st.button('Start Fetching Data'):
         id_list = ids.split(';')  # Split the input string into a list of IDs.
 
         while True:
+            results = []  # Initialize a list to store the results temporarily.
+
             for appointment_id in id_list:
                 data = fetch_data(appointment_id)  # Fetch the data for the given ID.
                 time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Current time.
 
-                # Determine the status and add the result to the DataFrame.
+                # Determine the status.
                 if data:
                     status = "Appointment Available"
                     color = "green"
@@ -38,15 +37,18 @@ def main():
                     status = "No Appointment"
                     color = "red"
 
-                # Append the result to the DataFrame.
-                df = df.append({"Time": time_now, "ID": appointment_id, "Status": status}, ignore_index=True)
+                # Append the result to the results list.
+                results.append({"Time": time_now, "ID": appointment_id, "Status": status})
 
-                # Display the DataFrame with color-coded statuses.
-                def color_status(val):
-                    color = 'red' if val == "No Appointment" else 'green'
-                    return f'background-color: {color}'
+            # Create a DataFrame from the results list.
+            df = pd.DataFrame(results)
 
-                st.dataframe(df.style.applymap(color_status, subset=['Status']))
+            # Display the DataFrame with color-coded statuses.
+            def color_status(val):
+                color = 'red' if val == "No Appointment" else 'green'
+                return f'background-color: {color}'
+
+            st.dataframe(df.style.applymap(color_status, subset=['Status']))
 
             time.sleep(5)  # Wait for 5 seconds before fetching again.
 
