@@ -17,7 +17,7 @@ def main():
     st.title('Multiple API Data Fetcher')
 
     # Input for IDs.
-    ids = st.text_input("Enter the IDs separated by semicolons (e.g., 4753;4754;4755; 4766)")
+    ids = st.text_input("Enter the IDs separated by semicolons (e.g., 4753;4754;4764;4766;4844)")
 
     if st.button('Start Fetching Data'):
         id_list = ids.split(';')  # Split the input string into a list of IDs.
