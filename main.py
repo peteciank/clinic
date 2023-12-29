@@ -71,7 +71,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-''''
+'''
 import streamlit as st
 import requests
 import pandas as pd
@@ -140,4 +140,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-''''
+'''
