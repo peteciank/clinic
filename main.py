@@ -17,7 +17,7 @@ def main():
     st.title('🏥 Buscador de Turnos')
 
     # Input for IDs.
-    ids = st.text_input("Ingresar los IDs de los Medicos separados por comas (e.g., 4753;4754;4764;4766;4844)", value="4753;4754;4764;4766;4844")
+    ids = st.text_input("Ingresar los IDs de los Medicos separados por comas (e.g., 4753;4754;4764;4766;4844;5799)", value="4753;4754;4764;4766;4844;5799")
 
     if st.button('Buscar Turnos'):
         id_list = ids.split(';')  # Split the input string into a list of IDs.
