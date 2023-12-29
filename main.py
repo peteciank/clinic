@@ -33,20 +33,25 @@ def main():
                 response_data = fetch_data(appointment_id)  # Fetch the data for the given ID.
                 time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Current time.
 
-                # Initialize variables for status and first available appointment.
-                status = "No Appointment"
+                # Initialize variables for date, hour, and status.
                 first_available = ""
+                status = ""
 
                 # Check the response data and determine the status and first available appointment.
-                if response_data and response_data.get('appointment') and response_data['appointment']:
-                    # Safely assuming the first one is the earliest if the list is not empty.
-                    appointment = response_data['appointment'][0]
+                if response_data and response_data.get('appointment') != []:
+                    appointment = response_data.get('appointment')[0]  # Assuming the first one is the earliest.
                     date = appointment.get('date')
                     hour = appointment.get('hour')
                     if date and hour:
                         first_available = f"{date} {hour}"
                         status = "Appointment Available"
-                # Note: If the 'appointment' is empty or not in the response, the status remains "No Appointment".
+                        color = "green"
+                    else:
+                        status = "No Appointment"
+                        color = "red"
+                else:
+                    status = "No Appointment"
+                    color = "red"
 
                 # Append the result to the results list.
                 results.append({"Time": time_now, "ID": appointment_id, "Status": status, "First Available": first_available})
@@ -59,9 +64,9 @@ def main():
                 color = 'red' if val == "No Appointment" else 'green'
                 return f'background-color: {color}'
 
-            # Clear previous data and display the new DataFrame with updated styling method.
+            # Clear previous data and display the new DataFrame.
             data_placeholder.empty()
-            data_placeholder.dataframe(df.style.map(color_status, subset=['Status']))
+            data_placeholder.dataframe(df.style.applymap(color_status, subset=['Status']))
 
             # Countdown to the next refresh.
             for remaining in range(5, 0, -1):
