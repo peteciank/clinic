@@ -33,16 +33,28 @@ def main():
                 response_data = fetch_data(appointment_id)  # Fetch the data for the given ID.
                 time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Current time.
 
-                # Check the 'appointment' field in the response and determine the status.
-                if response_data and response_data.get('appointment') == []:
+                # Initialize variables for date, hour, and status.
+                first_available = ""
+                status = ""
+
+                # Check the response data and determine the status and first available appointment.
+                if response_data and response_data.get('appointment') != []:
+                    appointment = response_data.get('appointment')[0]  # Assuming the first one is the earliest.
+                    date = appointment.get('date')
+                    hour = appointment.get('hour')
+                    if date and hour:
+                        first_available = f"{date} {hour}"
+                        status = "Appointment Available"
+                        color = "green"
+                    else:
+                        status = "No Appointment"
+                        color = "red"
+                else:
                     status = "No Appointment"
                     color = "red"
-                else:
-                    status = "Appointment Available"
-                    color = "green"
 
                 # Append the result to the results list.
-                results.append({"Time": time_now, "ID": appointment_id, "Status": status})
+                results.append({"Time": time_now, "ID": appointment_id, "Status": status, "First Available": first_available})
 
             # Create a DataFrame from the results list.
             df = pd.DataFrame(results)
