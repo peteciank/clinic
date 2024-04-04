@@ -16,6 +16,8 @@ def fetch_data(appointment_id):
 def main():
     st.title('🏥 Buscador de Turnos')
 
+    with st.expander:
+        st.info("This development is a python code of one of the most important hospitals in Argentina, [Hospital de Clinicas]. This app finds next appointments with specified doctors, based on personal codes served by the Hospital.")
     # Input for IDs.
     ids = st.text_input("Ingresar los IDs de los Medicos separados por comas (e.g., 4753;4754;4764;4766;4844;5799)", value="4753;4754;4764;4766;4844;5799")
 
