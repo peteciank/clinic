@@ -77,5 +77,23 @@ def main():
             # Clear countdown at the end of the cycle.
             countdown_placeholder.empty()
 
+# Display badge
+st.markdown("""
+    <div style="display: flex; align-items: center;">
+        <img src="https://raw.githubusercontent.com/peteciank/public_files/main/mugshot_light.png" alt="Profile Picture" style="border-radius: 50%; margin-right: 20px;width: 50px; height: 50px;">
+        <div>
+            <p style="font-weight: bold; margin-bottom: 5px;">Created by Pete Ciank</p>
+            <p style="margin: 0;">Streamlit enthusiast, Tech Lover, Product and Project Manager 💪</p>
+        </div>
+    </div>
+""", unsafe_allow_html=True)
+
+with st.expander("📃 Check my personal links, Resume, Cover Letter and More", expanded=False):
+    st.markdown('📖 My [LinkedIn](https://www.linkedin.com/in/pedrociancaglini/) Profile.')
+    st.markdown('🌎 My [Website](https://sites.google.com/view/pedrociancaglini)')
+    st.markdown('👩‍💻 My [Github](https://github.com/peteciank/)')
+    st.markdown('🔽 [Download](https://github.com/peteciank/public_files/blob/main/Ciancaglini_Pedro_Resume_v24.pdf) my Resume')
+    st.markdown('🔽 [Download](https://github.com/peteciank/public_files/blob/main/Cover%20Letter.pdf) my Letter')
+
 if __name__ == "__main__":
     main()
